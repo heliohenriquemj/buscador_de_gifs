@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gifs/ui/gif_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,12 +54,12 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Pesquise Aqui!",
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+              style: const TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
               onSubmitted: (text) {
                 setState(() {
@@ -114,10 +115,12 @@ class _HomePageState extends State<HomePage> {
             crossAxisCount: 2, crossAxisSpacing: 10.0, mainAxisSpacing: 10.0),
         itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index) {
-          if (_search == null || index < snapshot.data["data"].length)
+          if (_search == null || index < snapshot.data["data"].length) {
             return GestureDetector(
-              child: Image.network(
-                snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: snapshot.data["data"][index]["images"]["fixed_height"]
+                    ["url"],
                 height: 300.0,
                 fit: BoxFit.cover,
               ),
@@ -134,12 +137,12 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             );
-          else
+          } else {
             return Container(
               child: GestureDetector(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: const <Widget>[
                     Icon(
                       Icons.add,
                       color: Colors.white,
@@ -158,6 +161,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             );
+          }
         });
   }
 }
